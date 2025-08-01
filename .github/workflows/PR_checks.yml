@@ -118,7 +118,6 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-
       - name: Cache AVD
         id: avd-cache
         uses: actions/cache@v4
@@ -140,8 +139,8 @@ jobs:
           disable-animations: false
           script: echo "AVD snapshot created"
       
-      - name: Build APKs (before emulator)
-        run: ./gradlew PrebidDemoKotlin:assembleDebug PrebidDemoKotlin:assembleDebugAndroidTest
+      # - name: Build APKs (before emulator)
+      #   run: ./gradlew PrebidDemoKotlin:assembleDebug PrebidDemoKotlin:assembleDebugAndroidTest
 
       - name: Run connected tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -154,10 +153,3 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: ./gradlew PrebidDemoKotlin:connectedDebugAndroidTest
-
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: connected-android-test-report
-          path: app/build/reports/androidTests/connected/**
